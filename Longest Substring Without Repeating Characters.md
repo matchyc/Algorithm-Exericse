@@ -68,29 +68,35 @@ public:
 
 ## 思路2：
 ```c++
+
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-          int maxLen = 0;
-        int nLen = 0;
-        unordered_map<char,int> mp; // key-value 
+        int maxlen = 0;
+        int len = 0;
+        int j = 0; // 左边窗口
+        unordered_map<char,int> mp;
         unordered_map<char,int>::iterator it;
         for(int i = 0; i < s.size(); ++i) {
-            for(int j = i; j < s.size(); ++j) {
-                it = mp.find(s[j]);
-                if(it == mp.end()) {
-                    mp[s[j]] = j;
-                    nLen++;               
-                }
-                else if(it->second <>){
-                    
-                }
+            it = mp.find(s[i]);
+            if(it == mp.end()) {
+                len += 1;
+                mp.insert({s[i], i});
             }
+            else if(j <= it->second){
+                j = it->second + 1;
+                it->second = i;
+                len = i - j + 1;
+            }
+            else {
+                ++len;
+                mp[s[i]] = i;
+            }
+            maxlen = max(len,maxlen);
         }
-        return maxLen;
+        return maxlen;
     }
-}
-
+};
 ```
 
 ## 思路3：
@@ -98,10 +104,29 @@ public:
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        
+        // I'm going to look up cpp reference about "set", especially its methods.
+        // learning...
+        // done.
+        std::unordered_set<char> pack;
+        int maxLen = 0;
+        int l = 0, r = 0;
 
-    }
-}
+        for(;r < s.size();) {
+            if(pack.find(s[r]) == pack.end()) {
+                pack.emplace(s[r]);
+            }
+            else {
+                while(s[l] != s[r]) {
+                    pack.erase(s[l++]);
+                }
+                ++l;
+            }
+            maxLen = max(r - l + 1, maxLen);
+            ++r;
+        }
+        return maxLen;
+    }   
+};
 
 ```
 
